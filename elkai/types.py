@@ -1,21 +1,21 @@
-from typing import List, Dict, Tuple
+import numpy as np
+from typing import Dict, Tuple, List
 from . import _elkai, utils
 
 class DistanceMatrix(object):
     """A structure representing a matrix of float/int weights/distances."""
-    def __init__(self, distances: List[List[float]]):
-        """Creates the matrix structure representing a list of lists (2D matrix) of floats/ints."""
-
+    def __init__(self, distances: np.ndarray):
+        """Creates the matrix structure representing a 2D matrix of floats/ints."""
         if not utils.is_2d_matrix(distances):
             raise ValueError("distances must be a 2D matrix of floats/ints")
         
         self.distances = distances
 
-    def solve_tsp(self, runs=10) -> List[int]:
-        """Returns a list of indices that represent the TSP tour. You can adjust solver iterations with the runs parameter."""
+    def solve_tsp(self, runs=10) -> np.ndarray:
+        """Returns an array of indices that represent the TSP tour. You can adjust solver iterations with the runs parameter."""
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
-        
+
         dimension = len(self.distances)
         if dimension < 3:
             raise ValueError("dimension must be at least 3")
@@ -35,7 +35,7 @@ class DistanceMatrix(object):
         # output is one-indexed and doesn't contain the departure to first city by default
         # let's add the departure and fix indices
         solution.append(solution[0])
-        solution = [idx - 1 for idx in solution]
+        solution = [x - 1 for x in solution]
 
         return solution
 
@@ -59,9 +59,9 @@ class Coordinates2D(object):
         
         self.coords = coords
 
-    def solve_tsp(self, runs=10) -> List[str]:
-        """Returns a list of city names in the order of the TSP tour. You can adjust solver iterations with the runs parameter."""
-        
+    def solve_tsp(self, runs=10) -> np.ndarray:
+        """Returns an array of city names in the order of the TSP tour. You can adjust solver iterations with the runs parameter."""
+
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
         
@@ -84,6 +84,6 @@ class Coordinates2D(object):
         # solution is one-indexed and doesn't contain the departure to first city by default
         # let's add the departure and map indices to city names
         solution.append(solution[0])
-        solution_as_keys: List[str] = [numbers_to_keys[num] for num in solution]
+        solution_as_keys = [numbers_to_keys[num] for num in solution]
 
         return solution_as_keys

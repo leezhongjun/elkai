@@ -1,8 +1,8 @@
+import numpy as np
 from typing import List
 from . import utils, _elkai
 
-
-def solve_int_matrix(matrix: List[List[int]], runs=10, skip_end=True):
+def solve_int_matrix(matrix: np.ndarray, runs=10, skip_end=True):
     """[Deprecated] Given a 2D matrix of distances between cities, returns the indices of the cities ordered optimally for TSP."""
 
     flattened = utils.flatten_matrix(matrix)
@@ -13,7 +13,7 @@ def solve_int_matrix(matrix: List[List[int]], runs=10, skip_end=True):
     return cities
 
 
-def solve_float_matrix(matrix, runs=10, skip_end=True):
+def solve_float_matrix(matrix: np.ndarray, runs=10, skip_end=True):
     """[Deprecated] Given a 2D matrix of distances between cities, returns the indices of the cities ordered optimally for TSP."""
 
     # Note: this function (and the split between int and float solvers) is redundant.
